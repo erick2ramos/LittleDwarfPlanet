@@ -186,6 +186,8 @@ namespace Ldp
         {
             // Function should handle any kind of dieing animation
             Debug.Log("Crash");
+            shipSfx.loop = false;
+            shipSfx.Stop();
             state = ShipState.Crashed;
             shipSfx.PlayOneShot(shipCrash);
             Rigidbody.velocity = Vector2.zero;

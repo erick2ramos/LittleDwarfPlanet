@@ -21,9 +21,10 @@ public class PreloaderScript : MonoBehaviour {
             gm.NewGame();
             Debug.Log("New Game");
         }
-        if (tutorialMenu != null)
+        if (tutorialMenu != null && !GameManager.Get.tutorialShown)
         {
             MenuManager.Get.Open(tutorialMenu);
+            GameManager.Get.tutorialShown = true;
         }
     }
 }

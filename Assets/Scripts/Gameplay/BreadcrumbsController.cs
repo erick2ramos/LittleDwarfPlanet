@@ -9,6 +9,9 @@ namespace Lsp
         public float maxLifeTime;
         private float lifeTimer;
 
+        public AudioSource sfxPlayer;
+        public AudioClip bloopSound;
+
         // Use this for initialization
         void Start()
         {
@@ -20,6 +23,7 @@ namespace Lsp
         {
             lifeTimer = maxLifeTime;
             transform.localScale = Vector3.one;
+            sfxPlayer.PlayOneShot(bloopSound);
         }
 
         // Update is called once per frame

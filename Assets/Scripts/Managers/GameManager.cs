@@ -14,6 +14,7 @@ namespace Ldp
         public ScoreHolder Score;
         public bool isPaused;
         public bool isGameOver;
+        public bool tutorialShown;
 
         //Play timer countdown
         //Player has X seconds to land ship on planet
@@ -87,6 +88,11 @@ namespace Ldp
             // Has the job to show on screen the final score and give options to
             // replay or quit game
             isGameOver = true;
+            Invoke("ShowGameOverMenu", 2);
+        }
+
+        private void ShowGameOverMenu()
+        {
             GameObject menu = MenuManager.Get.Open(AssetsHolderManager.Get.gameOverMenu);
             string finalMsg = "";
             bool alive = false;
@@ -119,6 +125,7 @@ namespace Ldp
             menu.GetComponent<GameoverMenuController>().finalScore.text = finalScore;
             menu.GetComponent<GameoverMenuController>().gameMsg.text = finalMsg;
         }
+
 
         public void Quit()
         {
