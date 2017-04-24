@@ -60,6 +60,7 @@ namespace Ldp
             gravityCenter = targetPlanet.GetComponent<Transform>();
             Rigidbody = GetComponent<Rigidbody2D>();
             state = ShipState.Alive;
+            landingTimer = float.MaxValue;
 
             // Ship starts on perfect circle orbit around center
             // Calculation to get the initial velocity 
@@ -67,9 +68,13 @@ namespace Ldp
             Vector2 shipPosition = transform.position;
             Vector2 planetVector = centerOfGravity - shipPosition;
             Vector2 startingOrientation = Vector3.Cross(planetVector, transform.forward).normalized;
+            float rand = Random.Range(0, 10);
+            if (rand <= 5f)
+                startingOrientation = startingOrientation  * -1;
 
             float startingSpeed = planetVector.magnitude / (targetPlanet.Gravity);
             initialVelocity = startingOrientation * startingSpeed;
+            transform.rotation = Quaternion.Euler(0,0, Mathf.Atan2(startingOrientation.y, startingOrientation.x));
         }
 
         void Update()
@@ -117,9 +122,9 @@ namespace Ldp
 
                 fire.SetActive(false);
             }
-
+            Vector2 planetVector = gravityCenter.position - transform.position;
             // If fuel reserves depletes you are in big trouble, so game over
-            if(currentFuelQty <= 0)
+            if (currentFuelQty <= 0 || (gravityCenter.position - transform.position).magnitude > 100f)
             {
                 state = ShipState.NoFuel;
                 GameManager.Get.GameOver();
@@ -135,10 +140,8 @@ namespace Ldp
             }
 
             // Ship is allways falling towards a transform position
-            Vector2 planetVector = gravityCenter.position - transform.position;
             finalVelocity += planetVector.normalized * targetPlanet.Gravity * Time.deltaTime / 2;
             Rigidbody.velocity += finalVelocity;
-            Debug.DrawRay(transform.position, Rigidbody.velocity, Color.green);
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -177,7 +180,6 @@ namespace Ldp
         private void OnTriggerEnter2D(Collider2D collision)
         {
             // if ship triggers/collides with other thing rather than legs then ship crashed
-            Debug.Log("Was it me?");
             Die();
             GameManager.Get.GameOver();
         }
@@ -185,7 +187,6 @@ namespace Ldp
         public void Die()
         {
             // Function should handle any kind of dieing animation
-            Debug.Log("Crash");
             shipSfx.loop = false;
             shipSfx.Stop();
             state = ShipState.Crashed;

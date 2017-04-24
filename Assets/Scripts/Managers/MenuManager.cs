@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Ldp
 {
+    // Handles stackable panels/menus/popups
     public class MenuManager : MonoBehaviour
     {
         public static MenuManager Get

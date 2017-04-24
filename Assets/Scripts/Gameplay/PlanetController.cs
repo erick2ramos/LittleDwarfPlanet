@@ -8,8 +8,9 @@ namespace Ldp
     {
         // Class to hold planet propertys like gravity
         public float Gravity;
-        public float Mass;
-        public GameObject[] pupils;
+
+        public GameObject obstaclePrefab;
+        private GameObject[] obstacles;
 
 
         private Animator animator;
@@ -21,6 +22,16 @@ namespace Ldp
         {
             animator = GetComponent<Animator>();
             radius = GetComponent<CircleCollider2D>().radius;
+
+            obstacles = new GameObject[GameManager.Get.currentLevel];
+
+            //Calculate random rotations for the obstacles around the planet
+            for (int i = 0; i < obstacles.Length; i++)
+            {
+                float rotation = Random.Range(0, 359);
+                obstacles[i] = Instantiate(obstaclePrefab, transform, false);
+                obstacles[i].transform.rotation = Quaternion.Euler(0, 0, rotation);
+            }
         }
 
         // Handling the animator

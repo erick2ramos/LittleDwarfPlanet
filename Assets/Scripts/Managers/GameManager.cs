@@ -12,9 +12,12 @@ namespace Ldp
         public PlanetController TargetPlanet;
 
         public ScoreHolder Score;
+        public float totalScore;
         public bool isPaused;
         public bool isGameOver;
         public bool tutorialShown;
+
+        public int currentLevel;
 
         //Play timer countdown
         //Player has X seconds to land ship on planet
@@ -101,7 +104,9 @@ namespace Ldp
                 case ShipState.Landed:
                     {
                         finalMsg = "Congratulations";
+                        currentLevel++;
                         alive = true;
+                        totalScore += Score.FinalScore(alive);
                         break;
                     }
                 case ShipState.NoFuel:
@@ -120,7 +125,7 @@ namespace Ldp
                         break;
                     }
             }
-            string finalScore = Score.FinalScore(alive).ToString("00000");
+            string finalScore = totalScore.ToString("0000000");
 
             menu.GetComponent<GameoverMenuController>().finalScore.text = finalScore;
             menu.GetComponent<GameoverMenuController>().gameMsg.text = finalMsg;
